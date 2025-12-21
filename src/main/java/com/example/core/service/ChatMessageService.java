@@ -3,13 +3,10 @@ package com.example.core.service;
 import com.example.persistence.entity.ChatMessage;
 import com.example.persistence.entity.ChatRoom;
 import com.example.persistence.entity.ChatUser;
-import com.example.rest.ChatSessionRegistry;
 import io.quarkus.websockets.next.WebSocketConnection;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-
-import java.util.Collection;
 
 @ApplicationScoped
 public class ChatMessageService {

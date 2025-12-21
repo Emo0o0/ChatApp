@@ -1,4 +1,4 @@
-package com.example.rest;
+package com.example.rest.controller;
 
 import com.example.core.service.ChatRoomService;
 import com.example.persistence.entity.ChatUser;

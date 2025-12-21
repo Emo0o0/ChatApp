@@ -1,4 +1,4 @@
-package com.example.rest;
+package com.example.core.service;
 
 import io.quarkus.websockets.next.WebSocketConnection;
 import jakarta.enterprise.context.ApplicationScoped;

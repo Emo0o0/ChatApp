@@ -1,9 +1,7 @@
-package com.example.rest;
+package com.example.rest.websocket;
 
 import com.example.core.service.ChatMessageService;
-import com.example.persistence.entity.ChatMessage;
-import com.example.persistence.entity.ChatRoom;
-import com.example.persistence.entity.ChatUser;
+import com.example.core.service.ChatSessionRegistry;
 import io.quarkus.websockets.next.*;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
