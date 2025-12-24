@@ -1,5 +1,9 @@
 package com.example.rest.controller;
 
+import com.example.api.inputoutput.get_last_msgs.GetLastMessagesProcessor;
+import com.example.api.inputoutput.get_last_msgs.GetLastMessagesRequest;
+import com.example.api.inputoutput.get_old_msgs.GetOldMessagesProcessor;
+import com.example.api.inputoutput.get_old_msgs.GetOldMessagesRequest;
 import com.example.core.service.ChatRoomService;
 import com.example.persistence.entity.ChatUser;
 import jakarta.inject.Inject;
@@ -16,6 +20,11 @@ public class ChatRoomResource {
     @Inject
     ChatRoomService chatRoomService;
 
+    @Inject
+    GetLastMessagesProcessor getLastMessagesProcessor;
+    @Inject
+    GetOldMessagesProcessor getOldMessagesProcessor;
+
     @POST
     @Path("/private/{username1}/{username2}")
     @Transactional
@@ -27,6 +36,27 @@ public class ChatRoomResource {
 
         return Response.status(200)
                 .entity(chatRoomService.getOrCreatePrivateRoom(me, other))
+                .build();
+    }
+
+    @GET
+    @Path("/last/{roomId}_{limit}")
+    public Response getLastMessages(@PathParam("roomId") Long roomId,
+                                    @PathParam("limit") int limit) {
+        GetLastMessagesRequest request = new GetLastMessagesRequest(roomId, limit);
+        return Response.status(200)
+                .entity(getLastMessagesProcessor.process(request))
+                .build();
+    }
+
+    @GET
+    @Path("/last/{roomId}_{msgId}_{limit}")
+    public Response getBeforeMessages(@PathParam("roomId") Long roomId,
+                                      @PathParam("msgId") Long msgId,
+                                      @PathParam("limit") int limit) {
+        GetOldMessagesRequest request = new GetOldMessagesRequest(roomId, msgId, limit);
+        return Response.status(200)
+                .entity(getOldMessagesProcessor.process(request))
                 .build();
     }
 }

@@ -18,7 +18,6 @@ public class ChatMessageService {
     public void saveAndBroadcast(Long roomId, String username, String message, WebSocketConnection connection) {
         ChatRoom room = ChatRoom.findById(roomId);
         ChatUser sender = ChatUser.find("username", username).firstResult();
-
         ChatMessage cm = new ChatMessage(room, sender, message);
         cm.persist();
 
