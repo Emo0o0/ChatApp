@@ -1,9 +1,9 @@
 package com.example.core.service;
 
-import com.example.api.inputoutput.get_old_msgs.GetOldMessagesListResponse;
-import com.example.api.inputoutput.get_old_msgs.GetOldMessagesOperation;
-import com.example.api.inputoutput.get_old_msgs.GetOldMessagesRequest;
-import com.example.api.inputoutput.get_old_msgs.GetOldMessagesResponse;
+import com.example.api.inputoutput.message.get_older.GetOldMessagesListResponse;
+import com.example.api.inputoutput.message.get_older.GetOldMessagesOperation;
+import com.example.api.inputoutput.message.get_older.GetOldMessagesRequest;
+import com.example.api.inputoutput.message.get_older.GetOldMessagesResponse;
 import com.example.persistence.entity.ChatMessage;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;

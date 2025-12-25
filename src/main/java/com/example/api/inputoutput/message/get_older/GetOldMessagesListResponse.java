@@ -1,4 +1,4 @@
-package com.example.api.inputoutput.get_old_msgs;
+package com.example.api.inputoutput.message.get_older;
 
 import com.example.api.base.OperationResponse;
 

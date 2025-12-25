@@ -1,4 +1,4 @@
-package com.example.api.inputoutput.register;
+package com.example.api.inputoutput.chat_user.register;
 
 import com.example.api.base.OperationRequest;
 import jakarta.validation.constraints.Email;

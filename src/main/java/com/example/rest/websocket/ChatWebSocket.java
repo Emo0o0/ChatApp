@@ -5,6 +5,7 @@ import com.example.core.service.ChatSessionRegistry;
 import io.quarkus.websockets.next.*;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.antlr.v4.runtime.misc.Pair;
 
 @WebSocket(path = "/chat/{roomId}/{username}")
 public class ChatWebSocket {
@@ -18,8 +19,8 @@ public class ChatWebSocket {
 
     @OnOpen
     public void onOpen(WebSocketConnection conn) {
-        Long roomId = Long.valueOf(connection.pathParam("roomId"));
-        String username = connection.pathParam("username");
+        Long roomId = Long.valueOf(conn.pathParam("roomId"));
+        String username = conn.pathParam("username");
 
         registry.add(roomId, username, conn);
     }
@@ -28,8 +29,8 @@ public class ChatWebSocket {
     @Transactional
     public void onMessage(String message, WebSocketConnection conn) {
 
-        Long roomId = Long.valueOf(connection.pathParam("roomId"));
-        String username = connection.pathParam("username");
+        Long roomId = Long.valueOf(conn.pathParam("roomId"));
+        String username = conn.pathParam("username");
 
         messageService.saveAndBroadcast(roomId, username, message, conn);
     }

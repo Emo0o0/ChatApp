@@ -1,4 +1,4 @@
-package com.example.api.inputoutput.get_last_msgs;
+package com.example.api.inputoutput.message.get_last;
 
 import java.time.Instant;
 

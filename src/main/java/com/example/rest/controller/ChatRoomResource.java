@@ -1,9 +1,9 @@
 package com.example.rest.controller;
 
 import com.example.core.service.GetLastMessagesProcessor;
-import com.example.api.inputoutput.get_last_msgs.GetLastMessagesRequest;
+import com.example.api.inputoutput.message.get_last.GetLastMessagesRequest;
 import com.example.core.service.GetOldMessagesProcessor;
-import com.example.api.inputoutput.get_old_msgs.GetOldMessagesRequest;
+import com.example.api.inputoutput.message.get_older.GetOldMessagesRequest;
 import com.example.core.service.ChatRoomService;
 import com.example.persistence.entity.ChatUser;
 import jakarta.inject.Inject;
