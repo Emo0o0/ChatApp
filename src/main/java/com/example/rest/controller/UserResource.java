@@ -3,7 +3,6 @@ package com.example.rest.controller;
 import com.example.api.inputoutput.register.RegisterChatUserOperation;
 import com.example.api.inputoutput.register.RegisterChatUserRequest;
 import jakarta.inject.Inject;
-import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
