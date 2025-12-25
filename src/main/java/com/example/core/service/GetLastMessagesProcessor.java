@@ -1,5 +1,9 @@
-package com.example.api.inputoutput.get_last_msgs;
+package com.example.core.service;
 
+import com.example.api.inputoutput.get_last_msgs.GetLastMessagesListResponse;
+import com.example.api.inputoutput.get_last_msgs.GetLastMessagesOperation;
+import com.example.api.inputoutput.get_last_msgs.GetLastMessagesRequest;
+import com.example.api.inputoutput.get_last_msgs.GetLastMessagesResponse;
 import com.example.persistence.entity.ChatMessage;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;

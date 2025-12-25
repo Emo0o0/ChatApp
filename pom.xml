@@ -77,6 +77,11 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-security-jpa</artifactId>
+            <version>3.30.5</version>
+        </dependency>
     </dependencies>
 
     <build>
