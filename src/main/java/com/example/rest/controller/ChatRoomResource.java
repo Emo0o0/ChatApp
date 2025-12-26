@@ -1,9 +1,9 @@
 package com.example.rest.controller;
 
-import com.example.core.service.GetLastMessagesProcessor;
-import com.example.api.inputoutput.message.get_last.GetLastMessagesRequest;
-import com.example.core.service.GetOldMessagesProcessor;
-import com.example.api.inputoutput.message.get_older.GetOldMessagesRequest;
+import com.example.api.inputoutput.chat_room.group.add_member.GroupChatAddMemberOperation;
+import com.example.api.inputoutput.chat_room.group.add_member.GroupChatAddMemberRequest;
+import com.example.api.inputoutput.chat_room.group.create.CreateGroupChatOperation;
+import com.example.api.inputoutput.chat_room.group.create.CreateGroupChatRequest;
 import com.example.core.service.ChatRoomService;
 import com.example.persistence.entity.ChatUser;
 import jakarta.inject.Inject;
@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 @Path("/chat")
 @Produces(MediaType.APPLICATION_JSON)
@@ -19,11 +20,10 @@ public class ChatRoomResource {
 
     @Inject
     ChatRoomService chatRoomService;
-
     @Inject
-    GetLastMessagesProcessor getLastMessagesProcessor;
+    CreateGroupChatOperation createGroupChatOperation;
     @Inject
-    GetOldMessagesProcessor getOldMessagesProcessor;
+    GroupChatAddMemberOperation groupChatAddMemberOperation;
 
     @POST
     @Path("/private/{username1}/{username2}")
@@ -39,24 +39,20 @@ public class ChatRoomResource {
                 .build();
     }
 
-    @GET
-    @Path("/last/{roomId}_{limit}")
-    public Response getLastMessages(@PathParam("roomId") Long roomId,
-                                    @PathParam("limit") int limit) {
-        GetLastMessagesRequest request = new GetLastMessagesRequest(roomId, limit);
-        return Response.status(200)
-                .entity(getLastMessagesProcessor.process(request))
+    @POST
+    @Path("/group")
+    public Response createGroupChat(@RequestBody CreateGroupChatRequest request) {
+        return Response.status(201)
+                .entity(createGroupChatOperation.process(request))
                 .build();
     }
 
-    @GET
-    @Path("/last/{roomId}_{msgId}_{limit}")
-    public Response getBeforeMessages(@PathParam("roomId") Long roomId,
-                                      @PathParam("msgId") Long msgId,
-                                      @PathParam("limit") int limit) {
-        GetOldMessagesRequest request = new GetOldMessagesRequest(roomId, msgId, limit);
-        return Response.status(200)
-                .entity(getOldMessagesProcessor.process(request))
+    @POST
+    @Path("/group/addMember")
+    @Transactional
+    public Response addMemberToGroupChat(@RequestBody GroupChatAddMemberRequest request) {
+        return Response.status(201)
+                .entity(groupChatAddMemberOperation.process(request))
                 .build();
     }
 }

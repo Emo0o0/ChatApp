@@ -21,4 +21,12 @@ public class ChatRoom extends PanacheEntity {
     public ChatRoom(ChatRoomType type) {
         this.type = type;
     }
+
+    public ChatRoomType getType() {
+        return type;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
