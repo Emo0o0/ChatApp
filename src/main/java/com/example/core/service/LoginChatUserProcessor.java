@@ -5,7 +5,6 @@ import com.example.api.inputoutput.chat_user.login.LoginChatUserRequest;
 import com.example.api.inputoutput.chat_user.login.LoginChatUserResponse;
 import com.example.core.exception.ChatUserInvalidPasswordException;
 import com.example.core.exception.ChatUserNotFoundException;
-import com.example.core.service.ChatUserContext;
 import com.example.persistence.entity.ChatUser;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -12,17 +12,17 @@ public class ChatSessionRegistry {
 
     private final Map<Long, Map<String, WebSocketConnection>> rooms = new ConcurrentHashMap<>();
 
-    public void add(Long roomId, String username, WebSocketConnection connection) {
+    public void add(Long roomId, String userId, WebSocketConnection connection) {
         rooms
                 .computeIfAbsent(roomId, r -> new ConcurrentHashMap<>())
-                .put(username, connection);
+                .put(userId, connection);
         System.out.println("ROOM " + roomId + " connections: " + rooms.get(roomId).keySet());
     }
 
-    public void remove(Long roomId, String username) {
+    public void remove(Long roomId, String userId) {
         Map<String, WebSocketConnection> room = rooms.get(roomId);
         if (room != null) {
-            room.remove(username);
+            room.remove(userId);
             if (room.isEmpty()) {
                 rooms.remove(roomId);
             }

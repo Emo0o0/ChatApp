@@ -15,14 +15,14 @@ public class ChatMessageService {
     ChatSessionRegistry registry;
 
     @Transactional
-    public void saveAndBroadcast(Long roomId, String username, String message, WebSocketConnection connection) {
+    public void saveAndBroadcast(Long roomId, String userId, String message, WebSocketConnection connection) {
         ChatRoom room = ChatRoom.findById(roomId);
-        ChatUser sender = ChatUser.find("username", username).firstResult();
+        ChatUser sender = ChatUser.find("id", userId).firstResult();
         ChatMessage cm = new ChatMessage(room, sender, message);
         cm.persist();
 
         for (WebSocketConnection conn : registry.othersInRoom(roomId, connection)) {
-            conn.sendTextAndAwait(username + ": " + message);
+            conn.sendTextAndAwait(message);
         }
     }
 

@@ -7,11 +7,9 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.antlr.v4.runtime.misc.Pair;
 
-@WebSocket(path = "/chat/{roomId}/{username}")
+@WebSocket(path = "/chat/{roomId}/{userId}")
 public class ChatWebSocket {
 
-    @Inject
-    WebSocketConnection connection;
     @Inject
     ChatSessionRegistry registry;
     @Inject
@@ -20,9 +18,9 @@ public class ChatWebSocket {
     @OnOpen
     public void onOpen(WebSocketConnection conn) {
         Long roomId = Long.valueOf(conn.pathParam("roomId"));
-        String username = conn.pathParam("username");
+        String userId = conn.pathParam("userId");
 
-        registry.add(roomId, username, conn);
+        registry.add(roomId, userId, conn);
     }
 
     @OnTextMessage
@@ -30,15 +28,15 @@ public class ChatWebSocket {
     public void onMessage(String message, WebSocketConnection conn) {
 
         Long roomId = Long.valueOf(conn.pathParam("roomId"));
-        String username = conn.pathParam("username");
+        String userId = conn.pathParam("userId");
 
-        messageService.saveAndBroadcast(roomId, username, message, conn);
+        messageService.saveAndBroadcast(roomId, userId, message, conn);
     }
 
     @OnClose
     public void onClose(WebSocketConnection conn) {
         Long roomId = Long.valueOf(conn.pathParam("roomId"));
-        String username = conn.pathParam("username");
-        registry.remove(roomId, username);
+        String userId = conn.pathParam("userId");
+        registry.remove(roomId, userId);
     }
 }
