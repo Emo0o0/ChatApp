@@ -1,5 +1,8 @@
-package com.example.api.inputoutput.chat_user.login;
+package com.example.core.service;
 
+import com.example.api.inputoutput.chat_user.login.LoginChatUserOperation;
+import com.example.api.inputoutput.chat_user.login.LoginChatUserRequest;
+import com.example.api.inputoutput.chat_user.login.LoginChatUserResponse;
 import com.example.core.exception.ChatUserInvalidPasswordException;
 import com.example.core.exception.ChatUserNotFoundException;
 import com.example.core.service.ChatUserContext;

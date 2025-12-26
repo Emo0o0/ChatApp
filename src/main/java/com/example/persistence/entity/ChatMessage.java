@@ -52,7 +52,7 @@ public class ChatMessage extends PanacheEntity {
     }
 
     public void setContent(String newContent) {
-        this.content = content;
+        this.content = newContent;
     }
 
     public void setStatus(ChatMessageStatus messageStatus) {

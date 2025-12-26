@@ -4,6 +4,8 @@ import com.example.api.inputoutput.message.delete.DeleteMessageOperation;
 import com.example.api.inputoutput.message.delete.DeleteMessageRequest;
 import com.example.api.inputoutput.message.edit.EditMessageOperation;
 import com.example.api.inputoutput.message.edit.EditMessageRequest;
+import com.example.core.exception.ChatMessageNotFoundException;
+import com.example.core.exception.UnauthorisedResourceAccessException;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.PATCH;
@@ -22,17 +24,25 @@ public class ChatMessageResource {
     @PATCH
     @Path("/edit")
     public Response editMessage(@RequestBody EditMessageRequest request) {
-        return Response.status(200)
-                .entity(editMessageOperation.process(request))
-                .build();
+        try {
+            return Response.status(200)
+                    .entity(editMessageOperation.process(request))
+                    .build();
+        } catch (ChatMessageNotFoundException | UnauthorisedResourceAccessException e) {
+            return Response.status(400).build();
+        }
     }
 
     @DELETE
     @Path("/delete")
     public Response deleteMessage(@RequestBody DeleteMessageRequest request) {
-        return Response.status(200)
-                .entity(deleteMessageOperation.process(request))
-                .build();
+        try {
+            return Response.status(200)
+                    .entity(deleteMessageOperation.process(request))
+                    .build();
+        } catch (ChatMessageNotFoundException | UnauthorisedResourceAccessException e) {
+            return Response.status(400).build();
+        }
     }
 
 }

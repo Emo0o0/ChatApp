@@ -4,6 +4,9 @@ import com.example.api.inputoutput.chat_user.login.LoginChatUserOperation;
 import com.example.api.inputoutput.chat_user.login.LoginChatUserRequest;
 import com.example.api.inputoutput.chat_user.register.RegisterChatUserOperation;
 import com.example.api.inputoutput.chat_user.register.RegisterChatUserRequest;
+import com.example.core.exception.ChatUserAlreadyExistsException;
+import com.example.core.exception.ChatUserInvalidPasswordException;
+import com.example.core.exception.ChatUserNotFoundException;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
@@ -27,16 +30,24 @@ public class UserResource {
     @POST
     @Path("/register")
     public Response registerUser(@RequestBody @Valid RegisterChatUserRequest request) {
-        return Response.status(201)
-                .entity(registerChatUserOperation.process(request))
-                .build();
+        try {
+            return Response.status(201)
+                    .entity(registerChatUserOperation.process(request))
+                    .build();
+        } catch (ChatUserAlreadyExistsException e) {
+            return Response.status(400).build();
+        }
     }
 
     @POST
     @Path("/login")
     public Response loginUser(@RequestBody @Valid LoginChatUserRequest request) {
-        return Response.status(200)
-                .entity(loginChatUserOperation.process(request))
-                .build();
+        try {
+            return Response.status(200)
+                    .entity(loginChatUserOperation.process(request))
+                    .build();
+        } catch (ChatUserNotFoundException | ChatUserInvalidPasswordException e) {
+            return Response.status(400).build();
+        }
     }
 }
