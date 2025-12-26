@@ -22,7 +22,7 @@ public class ChatMessage extends PanacheEntity {
     private String content;
     @CreationTimestamp
     private Instant timestamp;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private ChatMessageStatus status;
 
     public ChatMessage() {
@@ -32,6 +32,7 @@ public class ChatMessage extends PanacheEntity {
         this.room = room;
         this.sender = sender;
         this.content = content;
+        this.status = ChatMessageStatus.SENT;
     }
 
     public String getContent() {
@@ -48,6 +49,14 @@ public class ChatMessage extends PanacheEntity {
 
     public ChatMessageStatus getStatus() {
         return this.status;
+    }
+
+    public void setContent(String newContent) {
+        this.content = content;
+    }
+
+    public void setStatus(ChatMessageStatus messageStatus) {
+        this.status = messageStatus;
     }
 
     public static List<ChatMessage> findLastMessages(Long roomId, int limit) {
