@@ -4,6 +4,8 @@ import com.example.api.inputoutput.chat_room.group.add_member.GroupChatAddMember
 import com.example.api.inputoutput.chat_room.group.add_member.GroupChatAddMemberRequest;
 import com.example.api.inputoutput.chat_room.group.create.CreateGroupChatOperation;
 import com.example.api.inputoutput.chat_room.group.create.CreateGroupChatRequest;
+import com.example.api.inputoutput.chat_room.group.remove_member.GroupChatRemoveMemberOperation;
+import com.example.api.inputoutput.chat_room.group.remove_member.GroupChatRemoveMemberRequest;
 import com.example.core.service.ChatRoomService;
 import com.example.persistence.entity.ChatUser;
 import jakarta.inject.Inject;
@@ -24,15 +26,17 @@ public class ChatRoomResource {
     CreateGroupChatOperation createGroupChatOperation;
     @Inject
     GroupChatAddMemberOperation groupChatAddMemberOperation;
+    @Inject
+    GroupChatRemoveMemberOperation groupChatRemoveMemberOperation;
 
     @POST
-    @Path("/private/{username1}/{username2}")
+    @Path("/private/{userId1}/{userId2}")
     @Transactional
-    public Response openPrivateChat(@PathParam("username1") String username1,
-                                    @PathParam("username2") String username2) {
+    public Response openPrivateChat(@PathParam("userId1") String userId1,
+                                    @PathParam("userId2") String userId2) {
 
-        ChatUser me = ChatUser.find("username", username1).firstResult();
-        ChatUser other = ChatUser.find("username", username2).firstResult();
+        ChatUser me = ChatUser.find("id", userId1).firstResult();
+        ChatUser other = ChatUser.find("id", userId2).firstResult();
 
         return Response.status(200)
                 .entity(chatRoomService.getOrCreatePrivateRoom(me, other))
@@ -49,10 +53,17 @@ public class ChatRoomResource {
 
     @POST
     @Path("/group/addMember")
-    @Transactional
     public Response addMemberToGroupChat(@RequestBody GroupChatAddMemberRequest request) {
         return Response.status(201)
                 .entity(groupChatAddMemberOperation.process(request))
+                .build();
+    }
+
+    @DELETE
+    @Path("/group/removeMember")
+    public Response removeMemberFromGroupChat(@RequestBody GroupChatRemoveMemberRequest request) {
+        return Response.status(200)
+                .entity(groupChatRemoveMemberOperation.process(request))
                 .build();
     }
 }
