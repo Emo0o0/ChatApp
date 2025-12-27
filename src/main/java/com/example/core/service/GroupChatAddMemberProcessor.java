@@ -3,6 +3,7 @@ package com.example.core.service;
 import com.example.api.inputoutput.chat_room.group.add_member.GroupChatAddMemberOperation;
 import com.example.api.inputoutput.chat_room.group.add_member.GroupChatAddMemberRequest;
 import com.example.api.inputoutput.chat_room.group.add_member.GroupChatAddMemberResponse;
+import com.example.core.exception.ChatRoomAddException;
 import com.example.core.exception.ChatRoomMemberException;
 import com.example.core.exception.ChatUserNotFoundException;
 import com.example.persistence.entity.ChatRoom;
@@ -17,16 +18,25 @@ public class GroupChatAddMemberProcessor implements GroupChatAddMemberOperation 
     @Override
     @Transactional
     public GroupChatAddMemberResponse process(GroupChatAddMemberRequest request) {
+        validate(request);
+
         ChatRoom room = ChatRoom.findById(request.roomId());
-        if (room.getType() != ChatRoomType.GROUP)
-            throw new ChatRoomMemberException("Cannot add members to private chat", 400);
 
         ChatUser user = ChatUser.find("id", request.userId()).firstResult();
-        if (user == null)
-            throw new ChatUserNotFoundException("Chat user with id [" + request.userId() + "] was not found");
 
         ChatRoomMember member = new ChatRoomMember(room, user);
         member.persist();
         return new GroupChatAddMemberResponse(true);
+    }
+
+    private void validate(GroupChatAddMemberRequest request) {
+        ChatRoom room = ChatRoom.<ChatRoom>findByIdOptional(request.roomId())
+                .orElseThrow(() -> new ChatRoomMemberException("Room with id [" + request.roomId() + "] was not found", 400));
+
+        if (room.getType() == ChatRoomType.PRIVATE)
+            throw new ChatRoomAddException("Cannot add members to private chat");
+
+        ChatUser user = ChatUser.<ChatUser>find("id", request.userId()).firstResultOptional()
+                .orElseThrow(() -> new ChatUserNotFoundException("Chat user with id [" + request.userId() + "] was not found"));
     }
 }

@@ -9,6 +9,7 @@ import com.example.api.inputoutput.message.get_last.GetLastMessagesRequest;
 import com.example.api.inputoutput.message.get_older.GetOldMessagesOperation;
 import com.example.api.inputoutput.message.get_older.GetOldMessagesRequest;
 import com.example.core.exception.ChatMessageNotFoundException;
+import com.example.core.exception.ChatRoomNotFoundException;
 import com.example.core.exception.UnauthorisedResourceAccessException;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -56,9 +57,13 @@ public class ChatMessageResource {
     public Response getLastMessages(@PathParam("roomId") Long roomId,
                                     @PathParam("limit") int limit) {
         GetLastMessagesRequest request = new GetLastMessagesRequest(roomId, limit);
-        return Response.status(200)
-                .entity(getLastMessagesOperation.process(request))
-                .build();
+        try {
+            return Response.status(200)
+                    .entity(getLastMessagesOperation.process(request))
+                    .build();
+        } catch (ChatRoomNotFoundException e) {
+            return Response.status(400).build();
+        }
     }
 
     @GET
@@ -67,9 +72,13 @@ public class ChatMessageResource {
                                       @PathParam("msgId") Long msgId,
                                       @PathParam("limit") int limit) {
         GetOldMessagesRequest request = new GetOldMessagesRequest(roomId, msgId, limit);
-        return Response.status(200)
-                .entity(getOldMessagesOperation.process(request))
-                .build();
+        try {
+            return Response.status(200)
+                    .entity(getOldMessagesOperation.process(request))
+                    .build();
+        } catch (ChatRoomNotFoundException | ChatMessageNotFoundException e) {
+            return Response.status(400).build();
+        }
     }
 
 }

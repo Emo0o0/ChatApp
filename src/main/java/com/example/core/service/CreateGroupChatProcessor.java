@@ -3,6 +3,7 @@ package com.example.core.service;
 import com.example.api.inputoutput.chat_room.group.create.CreateGroupChatOperation;
 import com.example.api.inputoutput.chat_room.group.create.CreateGroupChatRequest;
 import com.example.api.inputoutput.chat_room.group.create.CreateGroupChatResponse;
+import com.example.core.exception.ChatUserNotFoundException;
 import com.example.persistence.entity.ChatRoom;
 import com.example.persistence.entity.ChatRoomMember;
 import com.example.persistence.entity.ChatRoomType;
@@ -19,7 +20,8 @@ public class CreateGroupChatProcessor implements CreateGroupChatOperation {
         room.setName(request.name());
         room.persist();
         for (Long userId : request.members()) {
-            ChatUser user = ChatUser.find("id", userId).firstResult();
+            ChatUser user = ChatUser.<ChatUser>find("id", userId).firstResultOptional()
+                    .orElseThrow(() -> new ChatUserNotFoundException("User with id [" + userId + "] was not found"));
             ChatRoomMember roomMember = new ChatRoomMember(room, user);
             roomMember.persist();
         }

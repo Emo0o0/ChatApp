@@ -41,10 +41,13 @@ public class GroupChatRemoveMemberProcessor implements GroupChatRemoveMemberOper
     private void validate(GroupChatRemoveMemberRequest request) {
         ChatRoom room = ChatRoom.<ChatRoom>findByIdOptional(request.roomId())
                 .orElseThrow(() -> new ChatRoomNotFoundException("Room with id [" + request.roomId() + "] was not found"));
+
         if (room.getType() == ChatRoomType.PRIVATE)
             throw new ChatRoomRemoveException("Cannot remove members from private chats");
+
         ChatUser user = ChatUser.<ChatUser>findByIdOptional(request.userId())
                 .orElseThrow(() -> new ChatUserNotFoundException("User with id [" + request.userId() + "] was not found"));
+
         ChatRoomMember member = ChatRoomMember
                 .<ChatRoomMember>find("chatRoom.id = ?1 AND chatUser.id = ?2", request.roomId(), request.userId())
                 .firstResultOptional()
