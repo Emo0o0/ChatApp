@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  database:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: chatapp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Postgre!132
+      # Create additional databases
+#      POSTGRES_MULTIPLE_DATABASES: quarkus,keycloak
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+
+  # Your Quarkus Backend
+  backend:
+    build:
+      context: .  # Current directory since docker-compose.yml is in ChatApp
+      dockerfile: src/main/docker/Dockerfile.jvm
+    ports:
+      - "8081:8080"
+    environment:
+      # Database connection (pointing to the database service)
+      QUARKUS_DATASOURCE_USERNAME: postgres
+      QUARKUS_DATASOURCE_PASSWORD: Postgre!132
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://database:5432/chatapp
+      QUARKUS_DATASOURCE_DB_KIND: postgresql
+
+
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
